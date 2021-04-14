@@ -10,12 +10,15 @@ typedef struct Object_ Object;
 typedef void(*Object_Destroy)(Object* instance);
 typedef void(*Object_Display)(Object* instance);
 
-struct Object_ {
-    // methods are const pointers so that the user cannot re-assign them
-    const Object_Destroy destroy;
-    const Object_Display display;
-    // unique id for every Object
+// there are the fields that every class struct must contain at the beginning of
+// the struct - so that it can be cast to Object* and calling the methods will work
+#define OBJECT_MEMBERS \
+    const Object_Destroy destroy; \
+    const Object_Display display; \
     uint64_t objid;
+
+struct Object_ {
+    OBJECT_MEMBERS
 };
 
 // Object_create needs to be declared because users will need it to obtain an

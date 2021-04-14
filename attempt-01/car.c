@@ -20,8 +20,8 @@ void Car_display(Car *instance) {
 
 Car* Car_create(const char* make, const char* reg_no) {
     Car stack_instance = {
-        .destroy = Car_destroy,
-        .display = Car_display,
+        .destroy = (Object_Destroy) Car_destroy,
+        .display = (Object_Display) Car_display,
         .objid = rand(),
         .make = xstrdup(make),
         .reg_no = xstrdup(reg_no),
