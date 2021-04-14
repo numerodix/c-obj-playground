@@ -3,10 +3,14 @@
 
 
 int main() {
-    Object* instance = Object_create();
+    Object* instance_fst = Object_create();
+    Object* instance_snd = Object_create();
 
-    instance->display(instance);
-    instance->destroy(instance);
+    instance_fst->display(instance_fst);
+    instance_snd->display(instance_snd);
+
+    instance_fst->destroy(instance_fst);
+    instance_snd->destroy(instance_snd);
 
     return 0;
 }

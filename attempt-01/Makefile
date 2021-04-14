@@ -1,5 +1,4 @@
-#CFLAGS := -Wall -Wextra -Werror -pedantic -std=c11
-CFLAGS := -Wall -Wextra -pedantic -std=c11
+CFLAGS := -g -Wall -Wextra -pedantic -std=c11
 
 
 tools.o: tools.c tools.h
