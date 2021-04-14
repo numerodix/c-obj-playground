@@ -2,6 +2,7 @@
 #define CAR_H
 
 #include "object.h"
+#include "typeid.h"
 
 #include <stdint.h>
 
@@ -21,5 +22,7 @@ struct Car_ {
 };
 
 Car* Car_create(const char* make, const char* reg_no);
+
+Car* Car_cast(Object* instance);
 
 #endif

@@ -14,9 +14,10 @@ void Car_destroy(Car *instance) {
 }
 
 void Car_display(Car *instance) {
-    printf("Car_display for Car* instance [%p] objid: %lu make: %s reg_no: %s driven: %d kms\n",
-        (void*) instance, instance->objid, instance->make, instance->reg_no,
-        instance->driven);
+    char* id = format_object_identifier((Object*) instance);
+    printf("Car_display for Car* instance %s make: %s reg_no: %s driven: %d kms\n",
+        id, instance->make, instance->reg_no, instance->driven);
+    free(id);
 }
 
 void Car_drive(Car* instance, int num_kms) {
@@ -27,6 +28,7 @@ Car* Car_create(const char* make, const char* reg_no) {
     Car stack_instance = {
         .destroy = (Object_Destroy) Car_destroy,
         .display = (Object_Display) Car_display,
+        .typeid = TYPEID_CAR,
         .objid = rand(),
 
         .drive = Car_drive,
@@ -39,4 +41,14 @@ Car* Car_create(const char* make, const char* reg_no) {
     memcpy(instance, &stack_instance, sizeof(Car));
 
     return instance;
+}
+
+Car* Car_cast(Object* instance) {
+    // NOTE: if we had a type hierarchy this check would have to contain Car and
+    // all its subclasses, recursively
+    if (instance->typeid != TYPEID_CAR) {
+        return NULL;
+    }
+
+    return (Car*) instance;
 }
