@@ -14,8 +14,13 @@ void Car_destroy(Car *instance) {
 }
 
 void Car_display(Car *instance) {
-    printf("Car_display for Car* instance [%p] objid: %lu make: %s reg_no: %s\n", 
-        (void*) instance, instance->objid, instance->make, instance->reg_no);
+    printf("Car_display for Car* instance [%p] objid: %lu make: %s reg_no: %s driven: %d kms\n",
+        (void*) instance, instance->objid, instance->make, instance->reg_no,
+        instance->driven);
+}
+
+void Car_drive(Car* instance, int num_kms) {
+    instance->driven += num_kms;
 }
 
 Car* Car_create(const char* make, const char* reg_no) {
@@ -23,8 +28,11 @@ Car* Car_create(const char* make, const char* reg_no) {
         .destroy = (Object_Destroy) Car_destroy,
         .display = (Object_Display) Car_display,
         .objid = rand(),
+
+        .drive = Car_drive,
         .make = xstrdup(make),
         .reg_no = xstrdup(reg_no),
+        .driven = 0,
     };
 
     Car* instance = (Car*) xcalloc(1, sizeof(Car));
