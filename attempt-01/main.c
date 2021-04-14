@@ -1,16 +1,21 @@
+#include "car.h"
 #include "object.h"
 #include "tools.h"
 
 
+void display_and_destroy(Object* instance) {
+    instance->display(instance);
+    instance->destroy(instance);
+}
+
 int main() {
-    Object* instance_fst = Object_create();
-    Object* instance_snd = Object_create();
+    Object* object = Object_create();
+    Car* saab = Car_create("Saab", "ABC-123");
+    Car* volvo = Car_create("Volvo", "ERF-873");
 
-    instance_fst->display(instance_fst);
-    instance_snd->display(instance_snd);
-
-    instance_fst->destroy(instance_fst);
-    instance_snd->destroy(instance_snd);
+    display_and_destroy(object);
+    display_and_destroy((Object*) saab);
+    display_and_destroy((Object*) volvo);
 
     return 0;
 }

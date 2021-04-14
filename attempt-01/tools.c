@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 
 void die(const char* msg) {
@@ -18,4 +19,14 @@ void* xcalloc(size_t nmembers, size_t size) {
     }
 
     return block;
+}
+
+char* xstrdup(const char *src) {
+    char *dest = strdup(src);
+
+    if (!dest) {
+        die("strdup returned NULL");
+    }
+
+    return dest;
 }

@@ -11,8 +11,8 @@ void Object_destroy(Object *instance) {
 }
 
 void Object_display(Object *instance) {
-    printf("Object_display for Object* instance objid: %lu at: %p\n", 
-        instance->objid, (void*) instance);
+    printf("Object_display for Object* instance [%p] objid: %lu\n", 
+        (void*) instance, instance->objid);
 }
 
 Object* Object_create() {
@@ -23,9 +23,9 @@ Object* Object_create() {
     // heap Object*. This works because the int/ptr fields are memcpy'able, but
     // it's not pretty.
     Object stack_instance = {
-        .objid = rand(),
         .destroy = Object_destroy,
         .display = Object_display,
+        .objid = rand(),
     };
 
     Object* instance = (Object*) xcalloc(1, sizeof(Object));

@@ -11,6 +11,7 @@ typedef void(*Object_Destroy)(Object* instance);
 typedef void(*Object_Display)(Object* instance);
 
 struct Object_ {
+    // methods are const pointers so that the user cannot re-assign them
     const Object_Destroy destroy;
     const Object_Display display;
     // unique id for every Object
