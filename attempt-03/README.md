@@ -47,6 +47,24 @@ struct CarVTable {
 };
 ```
 
+Graphically, the structs are laid out like this:
+
+```
+---------- Car ---------
+| - super --\          | 
+|            |         |         --- ObjectVTable ---
+|     --------------   |         | - destroy        |
+|     | - *vtable  |   |   --->  | - display        |
+|     | - typeid   |   |         | - get_objid      |
+|     | - objid    |   |         | - subclass_print |
+|     --------------   |         --------------------
+|                      |
+| - *vtable            |   --->  ---- CarVTable -----
+| - make               |         | - drive          |
+| - reg_no             |         | - print          |
+| - driven             |         --------------------
+------------------------   
+```
 
 ## Object construction
 
