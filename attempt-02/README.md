@@ -23,7 +23,7 @@ This has the interesting effect that we get a nested struct to program against:
 Car* car = Car_create("Saab", "ABC-123");
 
 // method that belongs to Object
-car->super->display(car);
+car.super->display(car);
 
 // method that belongs to Car
 car->drive(car, 2);
