@@ -10,6 +10,10 @@ Okay, but what if we wanted to take this concept further and turn it into an obj
 
 Well, that's exactly the question we are exploring in this project. The project consists of a series of attempts at an object system, with working code and a discussion of the benefits and drawbacks of each attempt. These attempts tell a story, so we suggest reading them in order.
 
+1. [attempt-01 - Simplest design I could think of](attempt-01)
+2. [attempt-02 - Early htop](attempt-02)
+3. [attempt-03 - First attempt at vtables](attempt-03)
+
 For each attempt you'll want to do:
 
 ```bash
