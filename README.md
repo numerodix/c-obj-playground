@@ -8,7 +8,7 @@ We've all seen C APIs that work like this:
 
 Okay, but what if we wanted to take this concept further and turn it into an object system where the struct is an object, it belongs to a certain class and that class provides certain methods (stored in the struct as function pointers), classes can inherit from each other and so forth? How would we do that?
 
-Well, that's exactly the question we are exploring in this project.
+Well, that's exactly the question we are exploring in this project. The project consists of a series of attempts at an object system, with working code and a discussion of the benefits and drawbacks of each attempt. These attempts tell a story, so we suggest reading them in order.
 
 For each attempt you'll want to do:
 
