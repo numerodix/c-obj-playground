@@ -9,7 +9,7 @@
 
 typedef struct ElectricCar_ ElectricCar;
 
-// these are the types of the additional methods that Car has
+// these are the types of the additional methods that ElectricCar has
 typedef void(*ElectricCar_Charge)(ElectricCar* instance, int kwhs);
 
 struct ElectricCar_ {

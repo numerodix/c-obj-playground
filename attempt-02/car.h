@@ -25,4 +25,7 @@ Car* Car_create(const char* make, const char* reg_no);
 
 Car* Car_cast(Object* instance);
 
+void Car_destroy(Car *instance);
+void Car_drive(Car* instance, int num_kms);
+
 #endif
