@@ -7,14 +7,14 @@
 
 
 void display_and_destroy(Object* instance) {
-    Car* car = Car_cast(instance);
-    if (car) {
+    if (Object_is_A(instance, (const ObjectVTable*) &Car_vtable)) {
+        Car* car = (Car*) instance;
         int howfar = rand();
         ((const CarVTable*) car->super.vtable)->drive(car, howfar);
     }
 
-    ElectricCar* ecar = ElectricCar_cast(instance);
-    if (ecar) {
+    if (Object_is_A(instance, (const ObjectVTable*) &ElectricCar_vtable)) {
+        ElectricCar* ecar = (ElectricCar*) instance;
         ((const ElectricCarVTable*) ecar->super.super.vtable)->charge(ecar, 7);
     }
 

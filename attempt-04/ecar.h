@@ -2,7 +2,6 @@
 #define ECAR_H
 
 #include "car.h"
-#include "typeid.h"
 
 #include <stdint.h>
 
@@ -29,7 +28,5 @@ ElectricCar* ElectricCar_create(const char* make, const char* reg_no,
                                 int charge_kwhs);
 void ElectricCar_charge(ElectricCar* instance, int kwhs);
 void ElectricCar_display(ElectricCar *instance);
-
-ElectricCar* ElectricCar_cast(Object* instance);
 
 #endif

@@ -38,7 +38,6 @@ Car* Car_create(const char* make, const char* reg_no) {
     Car stack_instance = {
         .super = {
             .vtable = (const ObjectVTable*) &Car_vtable,
-            .typeid = TYPEID_CAR,
             .objid = rand(),
         },
         .make = xstrdup(make),
@@ -50,13 +49,4 @@ Car* Car_create(const char* make, const char* reg_no) {
     memcpy(instance, &stack_instance, sizeof(Car));
 
     return instance;
-}
-
-Car* Car_cast(Object* instance) {
-    if ((instance->typeid != TYPEID_CAR) &&
-        (instance->typeid != TYPEID_ELECTRIC_CAR)) {
-        return NULL;
-    }
-
-    return (Car*) instance;
 }

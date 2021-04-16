@@ -38,7 +38,6 @@ ElectricCar* ElectricCar_create(const char* make, const char* reg_no,
         .super = {
             .super = {
                 .vtable = (const ObjectVTable*) &ElectricCar_vtable,
-                .typeid = TYPEID_ELECTRIC_CAR,
                 .objid = rand(),
             },
             .make = xstrdup(make),
@@ -52,12 +51,4 @@ ElectricCar* ElectricCar_create(const char* make, const char* reg_no,
     memcpy(instance, &stack_instance, sizeof(ElectricCar));
 
     return instance;
-}
-
-ElectricCar* ElectricCar_cast(Object* instance) {
-    if (instance->typeid != TYPEID_ELECTRIC_CAR) {
-        return NULL;
-    }
-
-    return (ElectricCar*) instance;
 }

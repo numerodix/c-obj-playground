@@ -1,6 +1,5 @@
 #include "object.h"
 #include "tools.h"
-#include "typeid.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,7 +26,6 @@ void Object_display(Object *instance) {
 Object* Object_create() {
     Object stack_instance = {
         .vtable = &Object_vtable,
-        .typeid = TYPEID_OBJECT,
         .objid = rand(),
     };
 
@@ -37,10 +35,20 @@ Object* Object_create() {
     return instance;
 }
 
+bool Object_is_A(Object* instance, const ObjectVTable* vtable) {
+    for (const ObjectVTable* vt = instance->vtable; vt; vt = vt->extends) {
+        if (vt == vtable) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 char* format_object_identifier(Object* instance) {
-    const int maxlen = 60;  // guessing at the max len here
+    const int maxlen = 70;  // guessing at the max len here
     char* buf = xcalloc(1, maxlen);
-    snprintf(buf, maxlen, "[p: %p, typeid: %lu, objid: %lu]",
-        (void*) instance, instance->typeid, instance->objid);
+    snprintf(buf, maxlen, "[p: %p, vtable: %p, objid: %lu]",
+        (void*) instance, (void*) instance->vtable, instance->objid);
     return buf;
 }
