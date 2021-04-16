@@ -16,6 +16,8 @@ void display_and_destroy(Object* instance) {
     if (Object_is_A(instance, (const ObjectVTable*) &ElectricCar_vtable)) {
         ElectricCar* ecar = (ElectricCar*) instance;
         ((const ElectricCarVTable*) ecar->super.super.vtable)->charge(ecar, 7);
+        // ((const ElectricCarVTable*) ecar->super.super.vtable)->super.drive((Car*) ecar, 2);
+        // ((const CarVTable*) ((const ElectricCarVTable*) ecar->super.super.vtable)->super.super.extends)->drive((Car*) ecar, 3);
     }
 
     instance->vtable->display(instance);
