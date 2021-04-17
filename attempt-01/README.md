@@ -152,7 +152,7 @@ Object_display for Object* instance
 Car_display for Car* instance make: Saab reg_no: ABC-123 driven: 1714636915 kms
 ```
 
-Crucially, `instance->display()` will call `Car_display` if `instance` is an `Car*` which was upcast to `Object*`. This is because both `struct Object` and `struct Car` have a `SomeClass_display` method in the same position in the struct. When the compiler generates code for this function call (via the function pointer) it will calculate the address offset and do a jump to that location. Both `Object` and `Car` will then have a function at that address whose type matches `Object_display`, and the call will work. (If that struct field were to contain something else the call would produce a program crash.)
+Crucially, `instance->display()` will call `Car_display` if `instance` is a `Car*` which was upcast to `Object*`. This is because both `struct Object` and `struct Car` have a `SomeClass_display` method in the same position in the struct. When the compiler generates code for this function call (via the function pointer) it will calculate the address offset and do a jump to that location. Both `Object` and `Car` will then have a function at that address whose type matches `Object_display`, and the call will work. (If that struct field were to contain something else the call would produce a program crash.)
 
 Property #3 is also satisfied given that we give each class a unique type id. This allows us at runtime to attempt a downcast and check the type id to see if it ought to succeed or not:
 
