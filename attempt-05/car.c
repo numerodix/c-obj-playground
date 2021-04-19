@@ -4,10 +4,6 @@
 #include <glib/gprintf.h>
 
 
-void app_car_display_impl(AppCar* self);
-void app_car_drive_impl(AppCar* self, gint num_kms);
-
-
 static void AppCarClassInit(AppCarClass* class, gpointer class_data) {
     (void) class_data;
     class->display = app_car_display_impl;

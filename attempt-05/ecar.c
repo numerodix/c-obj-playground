@@ -3,10 +3,6 @@
 #include <glib/gprintf.h>
 
 
-void app_electric_car_charge_impl(AppElectricCar* self, gint kwhs);
-void app_electric_car_display_impl(AppElectricCar* self);
-
-
 static void AppElectricCarClassInit(AppElectricCarClass* class, gpointer class_data) {
     (void) class_data;
     class->parent.display = (AppCar_Display) app_electric_car_display_impl;
