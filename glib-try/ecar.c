@@ -58,6 +58,10 @@ void app_electric_car_charge(AppElectricCar* self, gint kwhs) {
     klass->charge(self, kwhs);
 }
 
+void app_electric_car_charge_impl(AppElectricCar* self, gint kwhs) {
+    self->charge_kwhs += kwhs;
+}
+
 void app_electric_car_display_impl(AppElectricCar* self) {
     AppCar* car = APP_CAR(self);
     g_printf("AppElectricCar*: make: %s, reg_no %s, driven: %d kms, charge: %d kwhw\n",
@@ -65,8 +69,4 @@ void app_electric_car_display_impl(AppElectricCar* self) {
              (char*) car->reg_no,
              (int) car->driven_kms,
              (int) self->charge_kwhs);
-}
-
-void app_electric_car_charge_impl(AppElectricCar* self, gint kwhs) {
-    self->charge_kwhs += kwhs;
 }
