@@ -8,10 +8,13 @@ CC := cc
 car.o: car.c car.h
 	$(CC) $(CFLAGS) $< -c -o $@
 
-main.o: main.c car.o
+ecar.o: ecar.c ecar.h car.h
 	$(CC) $(CFLAGS) $< -c -o $@
 
-main: main.o car.o
+main.o: main.c ecar.h car.h
+	$(CC) $(CFLAGS) $< -c -o $@
+
+main: main.o ecar.o car.o
 	$(CC) $^ -o $@ $(LFLAGS)
 
 run: main

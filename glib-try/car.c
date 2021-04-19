@@ -4,8 +4,8 @@
 #include <glib/gprintf.h>
 
 
-static void app_car_display_impl(AppCar* self);
-static void app_car_drive_impl(AppCar* self, gint num_kms);
+void app_car_display_impl(AppCar* self);
+void app_car_drive_impl(AppCar* self, gint num_kms);
 
 
 static void AppCarClassInit(AppCarClass* class, gpointer class_data) {
@@ -48,8 +48,6 @@ AppCar* app_car_new(const gchar* make, const gchar* reg_no) {
 void app_car_drive(AppCar* self, gint num_kms) {
     AppCarClass *klass;
 
-    g_return_if_fail(APP_IS_CAR(self));
-
     klass = APP_CAR_GET_CLASS(self);
     g_return_if_fail(klass->drive != NULL);
 
@@ -59,21 +57,19 @@ void app_car_drive(AppCar* self, gint num_kms) {
 void app_car_display(AppCar* self) {
     AppCarClass *klass;
 
-    g_return_if_fail(APP_IS_CAR(self));
-
     klass = APP_CAR_GET_CLASS(self);
     g_return_if_fail(klass->display != NULL);
 
     klass->display(self);
 }
 
-static void app_car_display_impl(AppCar* self) {
+void app_car_display_impl(AppCar* self) {
     g_printf("AppCar*: make: %s, reg_no %s, driven: %d kms\n",
              (char*) self->make,
              (char*) self->reg_no,
              (int) self->driven_kms);
 }
 
-static void app_car_drive_impl(AppCar* self, gint num_kms) {
+void app_car_drive_impl(AppCar* self, gint num_kms) {
     self->driven_kms += num_kms;
 }

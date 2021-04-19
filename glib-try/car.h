@@ -34,4 +34,7 @@ AppCar* app_car_new(const gchar* make, const gchar* reg_no);
 void app_car_display(AppCar* self);
 void app_car_drive(AppCar* self, gint num_kms);
 
+void app_car_display_impl(AppCar* self);
+void app_car_drive_impl(AppCar* self, gint num_kms);
+
 #endif
