@@ -20,6 +20,9 @@ main: main.o ecar.o car.o
 run: main
 	./main
 
+check: main
+	valgrind ./main
+
 
 clean:
 	rm -f main *.o

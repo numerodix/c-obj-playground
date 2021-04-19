@@ -10,11 +10,11 @@ Okay, but what if we wanted to take this concept further and turn it into an obj
 
 Well, that's exactly the question we are exploring in this project. The project consists of a series of attempts at an object system, with working code and a discussion of the benefits and drawbacks of each attempt. These attempts tell a story, so we suggest reading them in order.
 
-1. [attempt-01 - Simplest design I could think of](attempt-01)
-2. [attempt-02 - Early htop](attempt-02)
-3. [attempt-03 - First attempt at vtables](attempt-03)
-4. [attempt-04 - Present day htop](attempt-04)
-4. [attempt-05 - Implemented in GLib](attempt-05)
+1. [attempt-01](attempt-01) - Simplest design I could think of
+2. [attempt-02](attempt-02) - Early htop, no vtables
+3. [attempt-03](attempt-03) - First attempt at vtables
+4. [attempt-04](attempt-04) - Present day htop with vtables
+4. [attempt-05](attempt-05) - Same, but implemented in GLib
 
 For each attempt you'll want to do:
 
@@ -28,5 +28,5 @@ $ make check
 
 This exploration is inspired by looking at these projects:
 
-* [glib](https://gitlab.gnome.org/GNOME/glib)
-* [htop](https://github.com/htop-dev/htop)
+* [GLib](https://gitlab.gnome.org/GNOME/glib) is the core library that [GTK](https://gtk.org/) (and [Gnome](https://www.gnome.org/)) is built on
+* [htop](https://github.com/htop-dev/htop) is a popular process viewer for Unix
