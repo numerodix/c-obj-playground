@@ -14,6 +14,7 @@ Well, that's exactly the question we are exploring in this project. The project 
 2. [attempt-02 - Early htop](attempt-02)
 3. [attempt-03 - First attempt at vtables](attempt-03)
 4. [attempt-04 - Present day htop](attempt-04)
+4. [attempt-05 - Implemented in GLib](attempt-05)
 
 For each attempt you'll want to do:
 
@@ -27,4 +28,5 @@ $ make check
 
 This exploration is inspired by looking at these projects:
 
+* [glib](https://gitlab.gnome.org/GNOME/glib)
 * [htop](https://github.com/htop-dev/htop)
