@@ -28,5 +28,5 @@ $ make check
 
 This exploration is inspired by looking at these projects:
 
-* [GLib](https://gitlab.gnome.org/GNOME/glib) is the core library that [GTK](https://gtk.org/) (and [Gnome](https://www.gnome.org/)) is built on
+* [GLib](https://wiki.gnome.org/Projects/GLib) is the core library that [GTK](https://gtk.org/) (and [Gnome](https://www.gnome.org/)) is built on
 * [htop](https://github.com/htop-dev/htop) is a popular process viewer for Unix

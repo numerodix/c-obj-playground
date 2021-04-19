@@ -3,20 +3,22 @@
 #include <glib/gprintf.h>
 
 
+static void AppElectricCarBaseInit(AppCarClass* class) {
+    class->display = (AppCar_Display) app_electric_car_display_impl;
+    class->drive = app_car_drive_impl;
+}
+
 static void AppElectricCarClassInit(AppElectricCarClass* class, gpointer class_data) {
     (void) class_data;
-    class->parent.display = (AppCar_Display) app_electric_car_display_impl;
-    class->parent.drive = app_car_drive_impl;
     class->charge = app_electric_car_charge_impl;
 }
 
-GType app_electric_car_get_type (void)
-{
+GType app_electric_car_get_type () {
   static GType type = 0;
   if (type == 0) {
       const GTypeInfo info = {
           sizeof(AppElectricCarClass),
-          NULL, /* base_init */
+          (GBaseInitFunc) AppElectricCarBaseInit, /* base_init */
           NULL, /* base_finalize */
           (GClassInitFunc) AppElectricCarClassInit,  /* class_init */
           NULL, /* class_finalize */

@@ -1,6 +1,5 @@
 #include "car.h"
 
-#include <glib-object.h>
 #include <glib/gprintf.h>
 
 
@@ -10,8 +9,7 @@ static void AppCarClassInit(AppCarClass* class, gpointer class_data) {
     class->drive = app_car_drive_impl;
 }
 
-GType app_car_get_type (void)
-{
+GType app_car_get_type() {
   static GType type = 0;
   if (type == 0) {
       const GTypeInfo info = {

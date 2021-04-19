@@ -25,7 +25,7 @@ struct _AppCarClass {
 
 GType app_car_get_type (void);
 
-#define APP_TYPE_CAR app_car_get_type ()
+#define APP_TYPE_CAR app_car_get_type()
 #define APP_CAR(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), APP_TYPE_CAR, AppCar))
 #define APP_CAR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj), APP_TYPE_CAR, AppCarClass))
 #define APP_IS_CAR(obj) (G_TYPE_CHECK_INSTANCE_TYPE(obj, app_car_get_type()))
