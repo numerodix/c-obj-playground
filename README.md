@@ -15,6 +15,7 @@ Well, that's exactly the question we are exploring in this project. The project 
 3. [attempt-03](attempt-03) - First attempt at vtables
 4. [attempt-04](attempt-04) - Present day htop with vtables
 4. [attempt-05](attempt-05) - Same, but implemented in GLib
+4. [attempt-06](attempt-06) - The closest thing to C++?
 
 For each attempt you'll want to do:
 
