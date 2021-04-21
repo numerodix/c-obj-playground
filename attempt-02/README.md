@@ -71,7 +71,7 @@ Upcasting from `ElectricCar*` to `Car*`, as well as any kind of downcasting from
 ```c
 void func(Object *object) {
     // checked downcast
-    ElectricCar* ecar = EletricCar_cast(object);
+    ElectricCar* ecar = ElectricCar_cast(object);
 
     // checked upcast
     Car *car = Car_cast(ecar);

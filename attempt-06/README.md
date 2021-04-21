@@ -8,7 +8,7 @@ In `attempt-06` we're aiming for an object system that resembles C++ more closel
 Ever since `attempt-02` onwards we've been in a world where we rely on struct nesting to express inheritance, both in object structs and in class/vtable structs. This has the advantage that the superclass struct is easily included by the subclass and we achieve some level of encapsulation this way. But it also has the major disadvantage that the class hierarchy inexorably is part of the programming model. When accessing an object member we always need to know which class it's in:
 
 ```c
-ecar->charge_kwhs;          // charge_kwhs is a member of EletricCar
+ecar->charge_kwhs;          // charge_kwhs is a member of ElectricCar
 ecar->super.driven_kms;     // driven_kms is a member of Car
 ecar->super.super.objid;    // objid is a member of Object
 ```
@@ -90,7 +90,7 @@ ecar->vtable->display(ecar);
 And accessing fields on an object has the same syntax no matter which class the field comes from:
 
 ```c
-ecar->charge_kwhs;   // charge_kwhs is a member of EletricCar
+ecar->charge_kwhs;   // charge_kwhs is a member of ElectricCar
 ecar->driven_kms;    // driven_kms is a member of Car
 ecar->objid;         // objid is a member of Object
 ```
@@ -244,7 +244,7 @@ struct _ElectricCarVTable {
 
 ## Object construction
 
-Our vtables are static objects as before. They need to be chained in inheritance order and they need to be populated with method pointers. This is almost equivalent to what we saw in earlier attempts, except that for an `ElectricCarVTable` all the method pointers are of a type that expects `EletricCar*`. If we want to inherit a method from a superclass we can, but we need to cast it to an `ElectricCar_Something`. This is effectively one of very few places where casts are necessary:
+Our vtables are static objects as before. They need to be chained in inheritance order and they need to be populated with method pointers. This is almost equivalent to what we saw in earlier attempts, except that for an `ElectricCarVTable` all the method pointers are of a type that expects `ElectricCar*`. If we want to inherit a method from a superclass we can, but we need to cast it to an `ElectricCar_Something`. This is effectively one of very few places where casts are necessary:
 
 ```c
 ElectricCarVTable ElectricCar_vtable = {
@@ -303,7 +303,7 @@ This code is a bit tricky, because it looks like we expect `instance` to be `Car
 
 We then pretend that the vtable is of type `CarVTable*`, but again it could just as well be `ObjectVTable*` or some other class. We do this because we just cast `instance` to `Car*` earlier and that means its `vtable` *must* be a `CarVTable`.
 
-We compare the vtable pointer we found against `Car_vtable` (ie. `Car`'s actual vtable). If it's a match we know that `instance` is a `Car*`.
+We compare the vtable pointer we found against `Car_vtable` (ie. `Car`'s actual vtable). If it's a match we know that `instance` is a `Car*` or a subclass of `Car`.
 
 Otherwise we keep walking the chain. And again we pretend that the superclass vtable is a `CarVTable*` because the variable `vtable` already has that type.
 
@@ -313,3 +313,5 @@ So of all the locations in the system this one function is where we've accumulat
 ## Conclusions
 
 We've achieved a design that - relative to all our earlier attempts - looks a lot more like C++, or indeed any familiar object oriented language.
+
+The code compiles under `-Wall -Wextra -pedantic` without warnings on gcc-9.3.0 and clang-10.0.0.
