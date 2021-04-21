@@ -37,6 +37,7 @@ typedef void (*Object_Display)(Object* self);
 typedef int (*Object_Get_Objid)(Object* self);
 
 struct _ObjectVTable {
+    void* super;  // never points to anything!
     Object_Delete delete;
     Object_Display display;
     Object_Get_Objid get_objid;
@@ -49,6 +50,7 @@ typedef int (*Car_Get_Objid)(Car* self);
 typedef void (*Car_Drive)(Car* self, int kms);
 
 struct _CarVTable {
+    ObjectVTable* super;
     Car_Delete delete;
     Car_Display display;
     Car_Get_Objid get_objid;
@@ -70,10 +72,24 @@ int Object_get_objid(Object* self) {
 }
 
 ObjectVTable Object_vtable = {
+    .super = NULL,
     .delete = Object_delete,
     .display = Object_display,
     .get_objid = Object_get_objid,
 };
+
+Object* Object_cast(void* instance) {
+    ObjectVTable* vtable = ((Object*) instance)->vtable;
+
+    while (vtable) {
+        if (vtable == &Object_vtable) {
+            return (Object*) instance;
+        }
+        vtable = vtable->super;
+    }
+
+    return NULL;
+}
 
 
 void Car_display(Car* self) {
@@ -87,22 +103,38 @@ void Car_drive(Car* self, int kms) {
 }
 
 CarVTable Car_vtable = {
+    .super = &Object_vtable,
     .delete = (Car_Delete) Object_delete,
     .display = Car_display,
     .drive = Car_drive,
     .get_objid = (Car_Get_Objid) Object_get_objid,
 };
 
+Car* Car_cast(void* instance) {
+    CarVTable* vtable = ((Car*) instance)->vtable;
+
+    while (vtable) {
+        if (vtable == &Car_vtable) {
+            return (Car*) instance;
+        }
+        vtable = (CarVTable*) vtable->super;
+    }
+
+    return NULL;
+}
+
 
 void display_and_delete(void* instance) {
-    if (((Car*) instance)->vtable == &Car_vtable) {
-        Car* car = (Car*) instance;
+    Car* car = Car_cast(instance);
+    if (car) {
         car->vtable->drive(car, 8);
     }
 
-    Object* object = (Object*) instance;
-    object->vtable->display(object);
-    object->vtable->delete(object);
+    Object* object = Object_cast(instance);
+    if (object) {
+        object->vtable->display(object);
+        object->vtable->delete(object);
+    }
 }
 
 int main() {
