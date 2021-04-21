@@ -109,7 +109,7 @@ void Object_delete(Object* self) {
 }
 ```
 
-And `Car_delete` expects a `Car*`, even though this is an overloaded method that method belongs to `Object`.
+And `Car_delete` expects a `Car*`, even though this is an overloaded method that belongs to `Object`.
 
 ```c
 void Car_delete(Car* self) {
