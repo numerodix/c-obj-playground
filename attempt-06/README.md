@@ -305,13 +305,17 @@ We then pretend that the vtable is of type `CarVTable*`, but again it could just
 
 We compare the vtable pointer we found against `Car_vtable` (ie. `Car`'s actual vtable). If it's a match we know that `instance` is a `Car*` or a subclass of `Car`.
 
-Otherwise we keep walking the chain. And again we pretend that the superclass vtable is a `CarVTable*` because the variable `vtable` already has that type.
+Otherwise we keep walking the chain. We follow the `super` pointer to the superclass vtable and again we pretend that it's a `CarVTable*` because the variable `vtable` already has that type.
 
-So of all the locations in the system this one function is where we've accumulated most of the casts. :)
+Of all the locations in the system this one function is where we've accumulated most of the casts. :)
 
 
 ## Conclusions
 
 We've achieved a design that - relative to all our earlier attempts - looks a lot more like C++, or indeed any familiar object oriented language.
+
+We've done it with a minimum of macros, which means it still looks like plain C. We've also minimized the use of `void*` (ie. throwing away type information), which has two important benefits. First, pervasive use of `void*` in function signatures makes life confusing for the programmer because we have to guess at the type that is intended when calling the function. Second, `void*` eliminates static type checking and makes errors more likely. Where we use `void*` we accompany it with a checked cast to restore type safety.
+
+We've also minimized the use of unchecked casting (ie. overriding static type checking) and confined it to locations where the class is implemented, in order to remove them from locations where objects of the class are used.
 
 The code compiles under `-Wall -Wextra -pedantic` without warnings on gcc-9.3.0 and clang-10.0.0.
