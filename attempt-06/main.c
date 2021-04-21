@@ -4,7 +4,7 @@
 
 
 int xrandint(int min, int max) {
-    return (int) ((double) min + (((double) max * (double) rand()) / (double) RAND_MAX));
+    return (int) ((double) min + (((double) (max - min) * (double) rand()) / (double) RAND_MAX));
 }
 
 
