@@ -38,6 +38,17 @@ struct _Car {
 };
 
 
+#define ELECTRIC_CAR_FIELDS \
+    int charge_kwhs;
+
+struct _ElectricCar {
+    ElectricCarVTable* vtable;
+    OBJECT_FIELDS
+    CAR_FIELDS
+    ELECTRIC_CAR_FIELDS
+};
+
+
 typedef void (*Object_Delete)(Object* self);
 typedef void (*Object_Display)(Object* self);
 typedef int (*Object_Get_Objid)(Object* self);
@@ -61,6 +72,22 @@ struct _CarVTable {
     Car_Display display;
     Car_Get_Objid get_objid;
     Car_Drive drive;
+};
+
+
+typedef void (*ElectricCar_Delete)(ElectricCar* self);
+typedef void (*ElectricCar_Display)(ElectricCar* self);
+typedef int (*ElectricCar_Get_Objid)(ElectricCar* self);
+typedef void (*ElectricCar_Drive)(ElectricCar* self, int kms);
+typedef void (*ElectricCar_Charge)(ElectricCar* self, int kwhs);
+
+struct _ElectricCarVTable {
+    CarVTable* super;
+    ElectricCar_Delete delete;
+    ElectricCar_Display display;
+    ElectricCar_Get_Objid get_objid;
+    ElectricCar_Drive drive;
+    ElectricCar_Charge charge;
 };
 
 
@@ -125,8 +152,8 @@ CarVTable Car_vtable = {
     .super = &Object_vtable,
     .delete = Car_delete,
     .display = Car_display,
-    .drive = Car_drive,
     .get_objid = (Car_Get_Objid) Object_get_objid,
+    .drive = Car_drive,
 };
 
 Car* Car_create(const char* make, const char* reg_no, int driven_kms) {
@@ -153,10 +180,62 @@ Car* Car_cast(void* instance) {
 }
 
 
+void ElectricCar_charge(ElectricCar* self, int kwhs) {
+    self->charge_kwhs += kwhs;
+}
+
+void ElectricCar_display(ElectricCar* self) {
+    printf("ElectricCar* at: %p, objid: %d -- make: %s, reg_no: %s, driven: %d kms, charge: %d kwhs\n",
+           (void*) self, self->vtable->get_objid(self),
+           self->make, self->reg_no, self->driven_kms,
+           self->charge_kwhs);
+}
+
+ElectricCarVTable ElectricCar_vtable = {
+    .super = &Car_vtable,
+    .delete = (ElectricCar_Delete) Car_delete,
+    .display = ElectricCar_display,
+    .get_objid = (ElectricCar_Get_Objid) Object_get_objid,
+    .drive = (ElectricCar_Drive) Car_drive,
+    .charge = ElectricCar_charge,
+};
+
+ElectricCar* ElectricCar_create(const char* make, const char* reg_no, int driven_kms,
+                                int charge_kwhs) {
+    ElectricCar* ecar = (ElectricCar*) calloc(1, sizeof(ElectricCar));
+    ecar->vtable = &ElectricCar_vtable;
+    ecar->objid = xrandint(1, 1000);
+    ecar->make = strdup(make);
+    ecar->reg_no = strdup(reg_no);
+    ecar->driven_kms = driven_kms;
+    ecar->charge_kwhs = charge_kwhs;
+    return ecar;
+}
+
+ElectricCar* ElectricCar_cast(void* instance) {
+    ElectricCarVTable* vtable = ((ElectricCar*) instance)->vtable;
+
+    while (vtable) {
+        if (vtable == &ElectricCar_vtable) {
+            return (ElectricCar*) instance;
+        }
+        vtable = (ElectricCarVTable*) vtable->super;
+    }
+
+    return NULL;
+}
+
+
+
 void display_and_delete(void* instance) {
     Car* car = Car_cast(instance);
     if (car) {
         car->vtable->drive(car, xrandint(1, 10));
+    }
+
+    ElectricCar* ecar = ElectricCar_cast(instance);
+    if (ecar) {
+        ecar->vtable->charge(ecar, xrandint(100, 200));
     }
 
     Object* object = Object_cast(instance);
@@ -170,10 +249,12 @@ int main() {
     Object* object = Object_create();
     Car* saab = Car_create("Saab", "ABC-123", 10);
     Car* volvo = Car_create("Volvo", "SEK-977", 10);
+    ElectricCar* tesla = ElectricCar_create("Tesla", "EVP-400", 10, 50);
 
     display_and_delete(object);
     display_and_delete(saab);
     display_and_delete(volvo);
+    display_and_delete(tesla);
 
     return 0;
 }
