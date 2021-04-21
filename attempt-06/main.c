@@ -19,8 +19,6 @@ struct _Object {
     OBJECT_FIELDS
 };
 
-#define OBJECT_CAST(self) (Object*)(self)
-
 
 #define CAR_FIELDS \
     const char* make; \
@@ -33,40 +31,33 @@ struct _Car {
     CAR_FIELDS
 };
 
-#define CAR_CAST(self) (Car*)(self)
 
-
-typedef void (*Object_Delete)(void* self);
-typedef void (*Object_Display)(void* self);
-
-#define OBJECT_VTABLE_FIELDS \
-    Object_Delete delete; \
-    Object_Display display;
+typedef void (*Object_Delete)(Object* self);
+typedef void (*Object_Display)(Object* self);
 
 struct _ObjectVTable {
-    OBJECT_VTABLE_FIELDS
+    Object_Delete delete;
+    Object_Display display;
 };
 
 
-typedef void (*Car_Drive)(void* self, int kms);
-
-#define CAR_VTABLE_FIELDS \
-    Car_Drive drive;
+typedef void (*Car_Delete)(Car* self);
+typedef void (*Car_Display)(Car* self);
+typedef void (*Car_Drive)(Car* self, int kms);
 
 struct _CarVTable {
-    OBJECT_VTABLE_FIELDS
-    CAR_VTABLE_FIELDS
+    Car_Delete delete;
+    Car_Display display;
+    Car_Drive drive;
 };
 
 
-void Object_delete(void* self) {
-    Object* object = OBJECT_CAST(self);
-    free(object);
+void Object_delete(Object* self) {
+    free(self);
 }
 
-void Object_display(void* self) {
-    Object* object = OBJECT_CAST(self);
-    printf("Object* at: %p, objid: %d\n", (void*) object, object->objid);
+void Object_display(Object* self) {
+    printf("Object* at: %p, objid: %d\n", (void*) self, self->objid);
 }
 
 ObjectVTable Object_vtable = {
@@ -75,23 +66,32 @@ ObjectVTable Object_vtable = {
 };
 
 
-void Car_display(void* self) {
-    Car* car = CAR_CAST(self);
+void Car_display(Car* self) {
     printf("Car* at: %p, objid: %d -- make: %s, reg_no: %s, driven: %d kms\n",
-           (void*) self, car->objid, car->make, car->reg_no, car->driven_kms);
+           (void*) self, self->objid, self->make, self->reg_no, self->driven_kms);
 }
 
-void Car_drive(void* self, int kms) {
-    Car* car = CAR_CAST(self);
-    car->driven_kms += kms;
+void Car_drive(Car* self, int kms) {
+    self->driven_kms += kms;
 }
 
 CarVTable Car_vtable = {
-    .delete = Object_delete,
+    .delete = (Car_Delete) Object_delete,
     .display = Car_display,
     .drive = Car_drive,
 };
 
+
+void display_and_delete(void* instance) {
+    if (((Car*) instance)->vtable == &Car_vtable) {
+        Car* car = (Car*) instance;
+        car->vtable->drive(car, 8);
+    }
+
+    Object* object = (Object*) instance;
+    object->vtable->display(object);
+    object->vtable->delete(object);
+}
 
 int main() {
     Object* object = (Object*) calloc(1, sizeof(Object));
@@ -105,13 +105,8 @@ int main() {
     car->reg_no = "ABC-123";
     car->driven_kms = 13;
 
-    car->vtable->drive(car, 8);
-
-    object->vtable->display(object);
-    car->vtable->display(car);
-
-    object->vtable->delete(object);
-    car->vtable->delete(car);
+    display_and_delete(object);
+    display_and_delete(car);
 
     return 0;
 }
