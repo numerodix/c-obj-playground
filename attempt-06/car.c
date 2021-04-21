@@ -17,12 +17,16 @@ CarVTable Car_vtable = {
 
 Car* Car_create(const char* make, const char* reg_no, int driven_kms) {
     Car* car = (Car*) xcalloc(1, sizeof(Car));
+    Object_init((Object*) car);
+    Car_init(car, make, reg_no, driven_kms);
     car->vtable = &Car_vtable;
-    car->objid = xrandint(1, 1000);
-    car->make = xstrdup(make);
-    car->reg_no = xstrdup(reg_no);
-    car->driven_kms = driven_kms;
     return car;
+}
+
+void Car_init(Car* self, const char* make, const char* reg_no, int driven_kms) {
+    self->make = xstrdup(make);
+    self->reg_no = xstrdup(reg_no);
+    self->driven_kms = driven_kms;
 }
 
 void Car_delete(Car* self) {

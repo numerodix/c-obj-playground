@@ -28,6 +28,7 @@ struct _Object {
 };
 
 Object* Object_create();
+void Object_init(Object* self);
 void Object_delete(Object* self);
 void Object_display(Object* self);
 int Object_get_objid(Object* self);

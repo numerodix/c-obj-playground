@@ -16,9 +16,13 @@ ObjectVTable Object_vtable = {
 
 Object* Object_create() {
     Object* object = (Object*) xcalloc(1, sizeof(Object));
+    Object_init(object);
     object->vtable = &Object_vtable;
-    object->objid = xrandint(1, 1000);
     return object;
+}
+
+void Object_init(Object* self) {
+    self->objid = xrandint(1, 1000);
 }
 
 void Object_delete(Object* self) {

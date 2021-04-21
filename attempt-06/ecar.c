@@ -20,13 +20,15 @@ ElectricCarVTable ElectricCar_vtable = {
 ElectricCar* ElectricCar_create(const char* make, const char* reg_no, int driven_kms,
                                 int charge_kwhs) {
     ElectricCar* ecar = (ElectricCar*) xcalloc(1, sizeof(ElectricCar));
+    Object_init((Object*) ecar);
+    Car_init((Car*) ecar, make, reg_no, driven_kms);
+    ElectricCar_init(ecar, charge_kwhs);
     ecar->vtable = &ElectricCar_vtable;
-    ecar->objid = xrandint(1, 1000);
-    ecar->make = xstrdup(make);
-    ecar->reg_no = xstrdup(reg_no);
-    ecar->driven_kms = driven_kms;
-    ecar->charge_kwhs = charge_kwhs;
     return ecar;
+}
+
+void ElectricCar_init(ElectricCar* self, int charge_kwhs) {
+    self->charge_kwhs = charge_kwhs;
 }
 
 void ElectricCar_charge(ElectricCar* self, int kwhs) {

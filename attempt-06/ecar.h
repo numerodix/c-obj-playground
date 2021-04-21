@@ -22,6 +22,8 @@ struct _ElectricCarVTable {
     ElectricCar_Charge charge;
 };
 
+ElectricCarVTable ElectricCar_vtable;
+
 
 #define ELECTRIC_CAR_FIELDS \
     int charge_kwhs;
@@ -35,6 +37,7 @@ struct _ElectricCar {
 
 ElectricCar* ElectricCar_create(const char* make, const char* reg_no, int driven_kms,
                                 int charge_kwhs);
+void ElectricCar_init(ElectricCar* self, int charge_kwhs);
 void ElectricCar_charge(ElectricCar* self, int kwhs);
 void ElectricCar_display(ElectricCar* self);
 ElectricCar* ElectricCar_cast(void* instance);

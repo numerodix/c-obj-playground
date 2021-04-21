@@ -35,6 +35,7 @@ struct _Car {
 };
 
 Car* Car_create(const char* make, const char* reg_no, int driven_kms);
+void Car_init(Car* self, const char* make, const char* reg_no, int driven_kms);
 void Car_delete(Car* self);
 void Car_display(Car* self);
 void Car_drive(Car* self, int kms);
