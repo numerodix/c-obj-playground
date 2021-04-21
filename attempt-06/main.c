@@ -1,5 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+
+int xrandint(int min, int max) {
+    return (int) ((double) min + (((double) max * (double) rand()) / (double) RAND_MAX));
+}
 
 
 typedef struct _Object Object;
@@ -78,6 +84,13 @@ ObjectVTable Object_vtable = {
     .get_objid = Object_get_objid,
 };
 
+Object* Object_create() {
+    Object* object = (Object*) calloc(1, sizeof(Object));
+    object->vtable = &Object_vtable;
+    object->objid = xrandint(1, 1000);
+    return object;
+}
+
 Object* Object_cast(void* instance) {
     ObjectVTable* vtable = ((Object*) instance)->vtable;
 
@@ -92,6 +105,12 @@ Object* Object_cast(void* instance) {
 }
 
 
+void Car_delete(Car* self) {
+    free((char*) self->make);
+    free((char*) self->reg_no);
+    free(self);
+}
+
 void Car_display(Car* self) {
     printf("Car* at: %p, objid: %d -- make: %s, reg_no: %s, driven: %d kms\n",
            (void*) self, self->vtable->get_objid(self),
@@ -104,11 +123,21 @@ void Car_drive(Car* self, int kms) {
 
 CarVTable Car_vtable = {
     .super = &Object_vtable,
-    .delete = (Car_Delete) Object_delete,
+    .delete = Car_delete,
     .display = Car_display,
     .drive = Car_drive,
     .get_objid = (Car_Get_Objid) Object_get_objid,
 };
+
+Car* Car_create(const char* make, const char* reg_no, int driven_kms) {
+    Car* car = (Car*) calloc(1, sizeof(Car));
+    car->vtable = &Car_vtable;
+    car->objid = xrandint(1, 1000);
+    car->make = strdup(make);
+    car->reg_no = strdup(reg_no);
+    car->driven_kms = driven_kms;
+    return car;
+}
 
 Car* Car_cast(void* instance) {
     CarVTable* vtable = ((Car*) instance)->vtable;
@@ -127,7 +156,7 @@ Car* Car_cast(void* instance) {
 void display_and_delete(void* instance) {
     Car* car = Car_cast(instance);
     if (car) {
-        car->vtable->drive(car, 8);
+        car->vtable->drive(car, xrandint(1, 10));
     }
 
     Object* object = Object_cast(instance);
@@ -138,19 +167,13 @@ void display_and_delete(void* instance) {
 }
 
 int main() {
-    Object* object = (Object*) calloc(1, sizeof(Object));
-    object->vtable = &Object_vtable;
-    object->objid = rand();
-
-    Car* car = (Car*) calloc(1, sizeof(Car));
-    car->vtable = &Car_vtable;
-    car->objid = rand();
-    car->make = "Saab";
-    car->reg_no = "ABC-123";
-    car->driven_kms = 13;
+    Object* object = Object_create();
+    Car* saab = Car_create("Saab", "ABC-123", 10);
+    Car* volvo = Car_create("Volvo", "SEK-977", 10);
 
     display_and_delete(object);
-    display_and_delete(car);
+    display_and_delete(saab);
+    display_and_delete(volvo);
 
     return 0;
 }
