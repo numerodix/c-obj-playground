@@ -19,6 +19,9 @@ struct _Object {
     OBJECT_FIELDS
 };
 
+#define OBJECT_CAST(self) (Object*)(self)
+
+
 #define CAR_FIELDS \
     const char* make; \
     const char* reg_no; \
@@ -30,9 +33,11 @@ struct _Car {
     CAR_FIELDS
 };
 
+#define CAR_CAST(self) (Car*)(self)
 
-typedef void (*Object_Delete)(Object* self);
-typedef void (*Object_Display)(Object* self);
+
+typedef void (*Object_Delete)(void* self);
+typedef void (*Object_Display)(void* self);
 
 #define OBJECT_VTABLE_FIELDS \
     Object_Delete delete; \
@@ -43,7 +48,7 @@ struct _ObjectVTable {
 };
 
 
-typedef void (*Car_Drive)(Car* self, int kms);
+typedef void (*Car_Drive)(void* self, int kms);
 
 #define CAR_VTABLE_FIELDS \
     Car_Drive drive;
@@ -54,12 +59,14 @@ struct _CarVTable {
 };
 
 
-void Object_delete(Object* self) {
-    free(self);
+void Object_delete(void* self) {
+    Object* object = OBJECT_CAST(self);
+    free(object);
 }
 
-void Object_display(Object* self) {
-    printf("Object* at: %p, objid: %d\n", (void*) self, self->objid);
+void Object_display(void* self) {
+    Object* object = OBJECT_CAST(self);
+    printf("Object* at: %p, objid: %d\n", (void*) object, object->objid);
 }
 
 ObjectVTable Object_vtable = {
@@ -68,18 +75,20 @@ ObjectVTable Object_vtable = {
 };
 
 
-void Car_display(Car* self) {
+void Car_display(void* self) {
+    Car* car = CAR_CAST(self);
     printf("Car* at: %p, objid: %d -- make: %s, reg_no: %s, driven: %d kms\n",
-           (void*) self, self->objid, self->make, self->reg_no, self->driven_kms);
+           (void*) self, car->objid, car->make, car->reg_no, car->driven_kms);
 }
 
-void Car_drive(Car* self, int kms) {
-    self->driven_kms += kms;
+void Car_drive(void* self, int kms) {
+    Car* car = CAR_CAST(self);
+    car->driven_kms += kms;
 }
 
 CarVTable Car_vtable = {
     .delete = Object_delete,
-    .display = (Object_Display) Car_display,
+    .display = Car_display,
     .drive = Car_drive,
 };
 
